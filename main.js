@@ -1,12 +1,12 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Notification, Tray} = require('electron')
 const path = require('path')
 
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 400,
+    height: 300,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -37,5 +37,36 @@ app.on('activate', function () {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+app.on('ready', function() {
+  const { net } = require('electron')
+  setInterval(() => {
+    const request = net.request('http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json')
+    let body = '';
+    request.on('response', (response) => {
+      console.log(`STATUS: ${response.statusCode}`)
+      console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
+      response.on('data', (chunk) => {
+        console.log(`BODY: ${chunk}`)
+        body += chunk.toString();
+      })
+      response.on('end', () => {
+        console.log('No more data in response.')
+        let brokenJobs = JSON.parse(body).jobs.filter(job => job.color === 'red')
+        console.log(brokenJobs.length)
+        // new Notification('Title', {
+        //   body: 'Lorem Ipsum Dolor Sit Amet'
+        // }).show()
+        if (brokenJobs?.length) {
+          app.dock.setBadge(brokenJobs.length + '')
+          app.dock.setIcon(path.join(__dirname, 'jenkinsfire.png'))
+        } else {
+          app.dock.setBadge('');
+          app.dock.setIcon(path.join(__dirname, 'jenkins.png'))
+        }
+      })
+    })
+    request.end()
+  }, 60000);
+ 
+})
+
