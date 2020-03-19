@@ -3,13 +3,42 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Jenkins Monitor</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'">
+    <title>Jenkins Monitor - Alpha Version</title>
+    <style>
+      .culprit {
+        height: 50px;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
+      }
+      .culpritlist {
+        margin-top: 10px;
+      }
+      .job {
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid gray;
+        border-radius: 5px;
+        list-style: none;
+        background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.19, rgb(193,63,63)), color-stop(0.6, rgb(235,26,36)) );
+        height: 100px;
+      }
+
+      a {
+        color: white;
+      }
+
+      ul {
+        padding: 0;
+        margin: 0;
+      }
+      
+    </style>
   </head>
   <body>
     <h1>Hello!</h1>
-    <span>I'll let you know if any Omni Radiator jobs are broken.</span>
+    <p>I'll let you know if any Omni Radiator jobs are broken.</p>
+    <ul id="jobs"></ul>
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
