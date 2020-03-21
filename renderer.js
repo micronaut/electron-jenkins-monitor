@@ -8,20 +8,20 @@
 const { ipcRenderer, shell } = require('electron')
 
 ipcRenderer.on("update", (event, arg) => {
-  let list = [...arg.entries()].map(([job, {names, url}]) => {
+  let list = [...arg.entries()].map(([job, {culprits, url, status}]) => {
     return (
-      `<li class="job">
+      `<li class="job ${status}">
         <div>
           <div>
             <a target="_blank" class='jenkins-job' href='${url}'>${job}</a>
           </div>
           <div class="culpritlist">
-            ${names.map(culprit => `<img class="culprit" src="${culprit}.jpg" />`)}
+            ${culprits.map(culprit => `<img class="culprit" src="${culprit}.jpg" />`).join('')}
           </div>
         </div>
       </li>`
     )
-  });
+  }).join('');
 
   ipcRenderer.on('clear', () => {
     document.getElementById("jobs").innerHTML = '';

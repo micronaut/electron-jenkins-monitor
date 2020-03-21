@@ -14,14 +14,26 @@
       .culpritlist {
         margin-top: 10px;
       }
+      #jobs {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
       .job {
         padding: 5px;
         margin-top: 5px;
+        margin-right: 10px;
         border: 1px solid gray;
         border-radius: 5px;
         list-style: none;
         background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.19, rgb(193,63,63)), color-stop(0.6, rgb(235,26,36)) );
         height: 100px;
+        width: 400px;
+      }
+
+      .job.claimed {
+        background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.25, rgb(196,172,53)), color-stop(0.82, rgb(240,172,0)) );
       }
 
       a {
