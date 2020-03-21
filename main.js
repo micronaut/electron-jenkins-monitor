@@ -96,6 +96,11 @@ app.on("activate", function() {
 app.on("ready", function() {
   const { net } = require("electron");
 
+
+  setInterval(() => {
+
+
+
 Promise.all(
     [
       "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
@@ -174,6 +179,7 @@ Promise.all(
       });
     }
   });
+}, 5000);
 
 
   // setInterval(() => {
