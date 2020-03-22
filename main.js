@@ -1,54 +1,54 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Notification, Tray } = require("electron");
+const { app, BrowserWindow, Notification, Tray, net } = require("electron");
 const path = require("path");
 const nameToImageFileNameMap = {
-  'abhishek.bhasin': 'abhishek.bhasin',
-  'abhasin': 'abhishek.bhasin',
-  'alex.rebain' : 'alex.rebain',
-  'alexander.rebain': 'alex.rebain',
-  'arebain': 'alex.rebain',
-  'alyssa.poirier': 'alyssa.poirier',
-  'apoirier': 'alyssa.poirier',
-  'anshuman.ambasht': 'anshumanambasht',
-  'anshumanambasht' : 'anshumanambasht',
-  'dan.muszynski': 'dan.muszynski',
-  'dmuszyns': 'dan.muszynski',
-  'daniel.michon': 'daniel.michon',
-  'dmichon': 'daniel.michon',
-  'eannamal':  'elamaran.annamalai',
-  'elamaran.annamalai': 'elamaran.annamalai',
-  'edanows': 'eric.danowski',
-  'edanowsk': 'eric.danowski',
-  'eric.danowski': 'eric.danowski',
-  'hdash': 'himanshu.dash',
-  'himanshu.dash': 'himanshu.dash',
-  'james.miazek': 'jim',
-  'jim': 'jim',
-  'jim.miazek': 'jim',
-  'jmiazek': 'jim',
-  'james.trammell': 'james.trammell',
-  'jtrammel': 'james.trammell',
-  'jamie' : 'jsmylny',
-  'jamie.smylnycky': 'jsmylny',
-  'jsmylny': 'jsmylny',
-  'jquasne': 'jeff.quasney',
-  'kitcha.thirunavukkarasu': 'kitcha.thirunavukkarasu',
-  'krishnamoorthy.thirunavukarasu' : 'kitcha.thirunavukkarasu',
-  'kthirun': 'kitcha.thirunavukkarasu',
-  'maksuda.zaman': 'maksuda.zaman',
-  'mzaman': 'maksuda.zaman',
-  'pkrishna': 'prabu',
-  'prabu': 'prabu',
-  'prabu.krishnakumar': 'prabu',
-  'priya.tilavi': 'priya.tilavi',
-  'ramanathan.krishnamoorthy': 'ramanathan.krishnamoorthy',
-  'rkrishna': 'ramanathan.krishnamoorthy',
-  'rwang': 'rui.wang',
-  'rui.wang': 'rui.wang',
-  'spola': 'spola',
-  'sujana.pola': 'spola',
-  'tsposito': 'tsposito',
-  'unknown': 'unknown',
+  "abhishek.bhasin": "abhishek.bhasin",
+  abhasin: "abhishek.bhasin",
+  "alex.rebain": "alex.rebain",
+  "alexander.rebain": "alex.rebain",
+  arebain: "alex.rebain",
+  "alyssa.poirier": "alyssa.poirier",
+  apoirier: "alyssa.poirier",
+  "anshuman.ambasht": "anshumanambasht",
+  anshumanambasht: "anshumanambasht",
+  "dan.muszynski": "dan.muszynski",
+  dmuszyns: "dan.muszynski",
+  "daniel.michon": "daniel.michon",
+  dmichon: "daniel.michon",
+  eannamal: "elamaran.annamalai",
+  "elamaran.annamalai": "elamaran.annamalai",
+  edanows: "eric.danowski",
+  edanowsk: "eric.danowski",
+  "eric.danowski": "eric.danowski",
+  hdash: "himanshu.dash",
+  "himanshu.dash": "himanshu.dash",
+  "james.miazek": "jim",
+  jim: "jim",
+  "jim.miazek": "jim",
+  jmiazek: "jim",
+  "james.trammell": "james.trammell",
+  jtrammel: "james.trammell",
+  jamie: "jsmylny",
+  "jamie.smylnycky": "jsmylny",
+  jsmylny: "jsmylny",
+  jquasne: "jeff.quasney",
+  "kitcha.thirunavukkarasu": "kitcha.thirunavukkarasu",
+  "krishnamoorthy.thirunavukarasu": "kitcha.thirunavukkarasu",
+  kthirun: "kitcha.thirunavukkarasu",
+  "maksuda.zaman": "maksuda.zaman",
+  mzaman: "maksuda.zaman",
+  pkrishna: "prabu",
+  prabu: "prabu",
+  "prabu.krishnakumar": "prabu",
+  "priya.tilavi": "priya.tilavi",
+  "ramanathan.krishnamoorthy": "ramanathan.krishnamoorthy",
+  rkrishna: "ramanathan.krishnamoorthy",
+  rwang: "rui.wang",
+  "rui.wang": "rui.wang",
+  spola: "spola",
+  "sujana.pola": "spola",
+  tsposito: "tsposito",
+  unknown: "unknown"
 };
 
 let mainWindow = null;
@@ -56,19 +56,25 @@ let mainWindow = null;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
+    width: 880,
     height: 400,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, "preload.js")
+      preload: path.join(__dirname, "preload.js"),
     }
   });
+
+  mainWindow.on('show', () => {
+    updateFromRadiator();
+  })
 
   // and load the index.html of the app.
   mainWindow.loadFile("index.html");
 
+
+
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools();
 
   // mainWindow.webContents.on('did-finish-load', () => {
   // mainWindow.webContents.send('ping', 'whoooooooh!')
@@ -94,93 +100,7 @@ app.on("activate", function() {
 });
 
 app.on("ready", function() {
-  const { net } = require("electron");
-
-
-  setInterval(() => {
-
-
-
-Promise.all(
-    [
-      "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
-      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
-    ].map(url => {
-      return new Promise(function(resolve, reject) {
-        const request = net.request(url);
-
-        request.on('error', (e) => {
-          new Notification({
-            title: 'Error',
-            body: `${e.message} (${url})`,
-          }).show()
-        });
-        let body = "";
-        request.on("response", response => {
-          response.on("data", chunk => {
-            body += chunk.toString();
-          });
-          response.on("end", () => {
-            resolve(body);
-          });
-        });
-        request.end();
-      });
-    })
-  ).then(data => {
-    let brokenJobs = data.map(results => {
-      return JSON.parse(results).jobs.filter(job => job.color === 'red');
-    });
-
-    console.log(brokenJobs.flat().length);
-    if (brokenJobs.length === 0) {
-      app.dock.setBadge("");
-      app.dock.setIcon(path.join(__dirname, "jenkins.png"));
-    } else {
-      Promise.all(brokenJobs.flat().map(brokenJob => {
-        return new Promise(function(resolve, reject) {
-          const request = net.request(`http://jenkins-as01.gale.web:8080/job/${brokenJob.name}/lastBuild/api/json`);
-          let body = "";
-          request.on("response", response => {
-            response.on("data", chunk => {
-              body += chunk.toString();
-            });
-            response.on("end", () => {
-              resolve(body);
-            });
-          });
-          request.end();
-        })
-      })).then(data => {
-        let brokenJobsMap = new Map();
-        data.forEach(result => {
-          let flattenedActionsObject = Object.assign(...JSON.parse(result).actions);
-          let culprits = [];
-          if (flattenedActionsObject.claimedBy) {
-            culprits.push(nameToImageFileNameMap[flattenedActionsObject.claimedBy] || 'unknown');
-          } else if (JSON.parse(result).culprits.length > 0) {
-            JSON.parse(result).culprits.forEach(({fullName}) => {
-              culprits.push(nameToImageFileNameMap(fullName) || 'unknown');
-            });
-          } else {
-            culprits.push('unknown');
-          }
-          let jobName = JSON.parse(result).fullDisplayName.substr(0, JSON.parse(result).fullDisplayName.indexOf('#'))
-          brokenJobsMap.set(jobName, {culprits: culprits, url: JSON.parse(result).url, status: flattenedActionsObject.claimed ? 'claimed' : 'broken'});
-        })
-        console.log(brokenJobsMap)
-        try {
-          mainWindow.webContents.send("update", brokenJobsMap);
-        } catch (e) {
-          console.log("webcontents was destoyed");
-        }
-        app.dock.setBadge(data.length + "");
-        app.dock.setIcon(path.join(__dirname, "jenkinsFire.png"));
-      });
-    }
-  });
-}, 5000);
-
+  setInterval(updateFromRadiator, 30000);
 
   // setInterval(() => {
   //   let jenkinsURLs = [
@@ -266,3 +186,101 @@ Promise.all(
   // }, 5000);
 });
 
+
+function updateFromRadiator() {
+
+  Promise.all(
+    [
+      "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
+      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
+    ].map(url => {
+      return new Promise(function(resolve, reject) {
+        const request = net.request(url);
+
+        request.on("error", e => {
+          new Notification({
+            title: "Error",
+            body: `${e.message} (${url})`
+          }).show();
+        });
+        let body = "";
+        request.on("response", response => {
+          response.on("data", chunk => {
+            body += chunk.toString();
+          });
+          response.on("end", () => {
+            resolve(body);
+          });
+        });
+        request.end();
+      });
+    })
+  ).then(data => {
+    let brokenJobs = data.map(results => {
+      return JSON.parse(results).jobs.filter(job => job.color === "red");
+    });
+
+    console.log(brokenJobs.flat().length);
+    if (brokenJobs.length === 0) {
+      app.dock.setBadge("");
+      app.dock.setIcon(path.join(__dirname, "jenkins.png"));
+    } else {
+      Promise.all(
+        brokenJobs.flat().map(brokenJob => {
+          return new Promise(function(resolve, reject) {
+            const request = net.request(
+              `http://jenkins-as01.gale.web:8080/job/${brokenJob.name}/lastBuild/api/json`
+            );
+            let body = "";
+            request.on("response", response => {
+              response.on("data", chunk => {
+                body += chunk.toString();
+              });
+              response.on("end", () => {
+                resolve(body);
+              });
+            });
+            request.end();
+          });
+        })
+      ).then(data => {
+        let brokenJobsMap = new Map();
+        data.forEach(result => {
+          let flattenedActionsObject = Object.assign(
+            ...JSON.parse(result).actions
+          );
+          let culprits = [];
+          if (flattenedActionsObject.claimedBy) {
+            culprits.push(
+              nameToImageFileNameMap[flattenedActionsObject.claimedBy] ||
+                "unknown"
+            );
+          } else if (JSON.parse(result).culprits.length > 0) {
+            JSON.parse(result).culprits.forEach(({ fullName }) => {
+              culprits.push(nameToImageFileNameMap(fullName) || "unknown");
+            });
+          } else {
+            culprits.push("unknown");
+          }
+          let jobName = JSON.parse(result).fullDisplayName.substr(
+            0,
+            JSON.parse(result).fullDisplayName.indexOf("#")
+          );
+          brokenJobsMap.set(jobName, {
+            culprits: culprits,
+            url: JSON.parse(result).url,
+            status: flattenedActionsObject.claimed ? "claimed" : "broken"
+          });
+        });
+        // console.log(brokenJobsMap);
+        try {
+          mainWindow.webContents.send("update", brokenJobsMap);
+        } catch (e) {
+          console.log("webcontents was destoyed");
+        }
+        app.dock.setBadge(data.length + "");
+        app.dock.setIcon(path.join(__dirname, "jenkinsFire.png"));
+      });
+    }
+  });
+}

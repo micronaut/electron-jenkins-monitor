@@ -8,6 +8,8 @@
 const { ipcRenderer, shell } = require('electron')
 
 ipcRenderer.on("update", (event, arg) => {
+  document.getElementById("updateTime").innerText = `View Refreshed: ${new Date().toLocaleString()}`
+  document.getElementById("jobs").innerHTML = '';
   let list = [...arg.entries()].map(([job, {culprits, url, status}]) => {
     return (
       `<li class="job ${status}">
@@ -23,20 +25,22 @@ ipcRenderer.on("update", (event, arg) => {
     )
   }).join('');
 
-  ipcRenderer.on('clear', () => {
-    document.getElementById("jobs").innerHTML = '';
-  });
+  // ipcRenderer.on('clear', () => {
+  //   document.getElementById("jobs").innerHTML = '';
+  // });
+
 
   document.getElementById("jobs").insertAdjacentHTML('beforeend', list);
   // document.getElementById("jobs").innerHTML = list;
 
-  document.addEventListener('click', function (event) {
-    if (event.target.matches('.jenkins-job')) {
-      // Run your code to open a modal
-      event.preventDefault();
-      shell.openExternal(event.target.getAttribute('href'));
-    }
-  }, false);
+  // document.addEventListener('click', function (event) {
+  //   debugger;
+  //   if (event.target.matches('.jenkins-job')) {
+  //     // Run your code to open a modal
+  //     event.preventDefault();
+  //     shell.openExternal(event.target.getAttribute('href'));
+  //   }
+  // }, false);
 
 
 
@@ -53,3 +57,12 @@ ipcRenderer.on("update", (event, arg) => {
   // }, false);
 
 });
+
+
+document.addEventListener('click', function (event) {
+  if (event.target.matches('.jenkins-job')) {
+    // Run your code to open a modal
+    event.preventDefault();
+    shell.openExternal(event.target.getAttribute('href'));
+  }
+}, false);

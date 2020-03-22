@@ -38,18 +38,29 @@
 
       a {
         color: white;
+        cursor: pointer;
       }
 
       ul {
         padding: 0;
         margin: 0;
       }
+
+      .problem {
+        font-weight: bold;
+      }
+
+      h1 {
+        border-bottom: 1px solid gray;
+      }
       
     </style>
   </head>
   <body>
-    <h1>Hello!</h1>
-    <p>I'll let you know if any Omni Radiator jobs are broken.</p>
+    <h1>Jenkins Monitor - Alpha Version</h1>
+    <p>I'll let you know if any Omni or Central Services Radiator jobs are broken.</p>
+    <div id="updateTime"></div>
+    <div class="problem">💩 Any problems, log them in OPLAT-14321!  💩</div>
     <ul id="jobs"></ul>
 
     <!-- You can also require other files to run in this process -->
