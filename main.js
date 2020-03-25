@@ -56,21 +56,39 @@ const nameToImageFileNameMap = {
   unknown: "unknown"
 };
 
+const store = new Store({
+  // We'll call our data file 'user-preferences'
+  configName: 'user-preferences',
+  defaults: {
+    radiatorsToMonitor: [
+      "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
+      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
+    ],
+    windowBounds: { width: 800, height: 400 }
+  }
+});
+
 let mainWindow = null;
 
 function createWindow() {
   // Create the browser window.
+  let { width, height } = store.get('windowBounds');
   mainWindow = new BrowserWindow({
-    width: 880,
-    height: 400,
+    width: width,
+    height: height,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js"),
     }
   });
 
-  
-
+  mainWindow.on('resize', () => {
+    // The event doesn't pass us the window size, so we call the `getBounds` method which returns an object with
+    // the height, width, and x and y coordinates.
+    let { width, height } = mainWindow.getBounds();
+    // Now that we have them, save them using the `set` method.
+    store.set('windowBounds', { width, height });
+  });
 
 
   mainWindow.on('show', () => {
@@ -108,16 +126,7 @@ app.on("activate", function() {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-const store = new Store({
-  // We'll call our data file 'user-preferences'
-  configName: 'user-preferences',
-  defaults: {
-    radiatorsToMonitor: [
-      "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
-      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
-    ]
-  }
-});
+
 
 const menuArray = [
   {
@@ -234,6 +243,7 @@ function updateFromRadiator() {
       ).then(data => {
         let brokenJobsMap = new Map();
         data.forEach(result => {
+          // console.log('**result', result)
           let flattenedActionsObject = Object.assign(
             ...JSON.parse(result).actions
           );

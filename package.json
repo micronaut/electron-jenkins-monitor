@@ -1,7 +1,7 @@
 {
   "name": "JenkinsMonitor",
-  "version": "0.0.2",
-  "description": "A minimal Electron application",
+  "version": "0.0.3",
+  "description": "An Electron app to monitor Jenkins radiators",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -9,15 +9,12 @@
     "build-snapshot": "electron-packager . JenkinsMonitor --overwrite --icon=./jenkins.icns --out=snapshot2 --extraResources=[jenkins.png, jenkinsfire.png]",
     "package-win": "electron-packager . JenkinsMonitor --overwrite --asar --platform=win32 --arch=x64 --icon=jenkins.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Jenkins Monitor\""
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Jenkins"
   ],
-  "author": "GitHub",
+  "author": "Eric Danowski",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^8.1.1",
