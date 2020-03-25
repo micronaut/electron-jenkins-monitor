@@ -1,8 +1,10 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Notification, Tray, net } = require("electron");
+const { app, BrowserWindow, Notification, Tray, net, Menu, MenuItem } = require("electron");
 const path = require("path");
+const Store = require('./store.js');
 const nameToImageFileNameMap = {
   "abhishek.bhasin": "abhishek.bhasin",
+  "Bhasin, Abhishek": "abhishek.bhasin",
   abhasin: "abhishek.bhasin",
   "alex.rebain": "alex.rebain",
   "alexander.rebain": "alex.rebain",
@@ -10,6 +12,7 @@ const nameToImageFileNameMap = {
   "alyssa.poirier": "alyssa.poirier",
   apoirier: "alyssa.poirier",
   "anshuman.ambasht": "anshumanambasht",
+  "aanshuman": "anshumanambasht",
   anshumanambasht: "anshumanambasht",
   "dan.muszynski": "dan.muszynski",
   dmuszyns: "dan.muszynski",
@@ -45,6 +48,8 @@ const nameToImageFileNameMap = {
   rkrishna: "ramanathan.krishnamoorthy",
   rwang: "rui.wang",
   "rui.wang": "rui.wang",
+  "sgovil": "shubhamgovil", 
+  "shubhamgovil": "shubhamgovil",
   spola: "spola",
   "sujana.pola": "spola",
   tsposito: "tsposito",
@@ -63,6 +68,10 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     }
   });
+
+  
+
+
 
   mainWindow.on('show', () => {
     updateFromRadiator();
@@ -99,101 +108,80 @@ app.on("activate", function() {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
+const store = new Store({
+  // We'll call our data file 'user-preferences'
+  configName: 'user-preferences',
+  defaults: {
+    radiatorsToMonitor: [
+      "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
+      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
+    ]
+  }
+});
+
+const menuArray = [
+  {
+    label: 'Settings',
+    submenu: [
+      {
+        label: 'Central Services Radiator',
+        type: 'checkbox',
+        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"),
+        click: (evt) => { 
+          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
+          if (evt.checked) { 
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"]);
+          } else {
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"));
+          }
+          updateFromRadiator();
+        }
+      },
+      {
+        label: 'Omni Radiator',
+        type: 'checkbox',
+        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"),
+        click: (evt) => { 
+          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
+          if (evt.checked) { 
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"]);
+          } else {
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"));
+          }
+          updateFromRadiator();
+        }
+      },
+      {
+        label: 'QA Radiator',
+        type: 'checkbox',
+        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.gale.web:8080/view/Omni-Automation-QAI-Radiator/api/json"),
+        click: (evt) => { 
+          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
+          if (evt.checked) { 
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.gale.web:8080/view/Omni-Automation-QAI-Radiator/api/json"]);
+          } else {
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.gale.web:8080/view/Omni-Automation-QAI-Radiator/api/json"));
+          }
+          updateFromRadiator();
+        }
+      }
+    ],
+  }
+];
+const menu = Menu.buildFromTemplate(menuArray);
+Menu.setApplicationMenu(menu);
+
+
 app.on("ready", function() {
-  setInterval(updateFromRadiator, 30000);
-
-  // setInterval(() => {
-  //   let jenkinsURLs = [
-  //     "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
-  //   ];
-
-  //   jenkinsURLs.forEach(url => {
-  //     const request = net.request(url);
-
-  //     request.on('error', (e) => {
-  //       new Notification({
-  //         title: 'Error',
-  //         body: `${e.message} (${url})`,
-  //       }).show()
-  //     });
-
-  //     let body = "";
-  //     request.on("response", response => {
-  //       // console.log(`STATUS: ${response.statusCode}`);
-  //       // console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
-  //       response.on("data", chunk => {
-  //         console.log(`BODY: ${chunk}`);
-  //         body += chunk.toString();
-  //       });
-  //       response.on("end", () => {
-  //         console.log("No more data in response.");
-  //         let brokenJobs = JSON.parse(body).jobs.filter(
-  //           job => job.color === "red"
-  //         );
-  //         console.log(brokenJobs.length);
-
-  //         try {
-  //           mainWindow.webContents.send("clear", {});
-  //         } catch (e) {
-  //           console.log("webcontents was destoyed");
-  //         }
-  //         // new Notification('Title', {
-  //         //   body: 'Lorem Ipsum Dolor Sit Amet'
-  //         // }).show()
-
-  //         if (brokenJobs?.length === 0) {
-  //           app.dock.setBadge("");
-  //           app.dock.setIcon(path.join(__dirname, "jenkins.png"));
-  //         }
-
-  //         brokenJobs.map(job => {
-  //           let jobCulpritsMap = new Map();
-  //           const culpritRequest = net.request(
-  //             `http://jenkins-as01.gale.web:8080/job/${job.name}/lastBuild/api/json`
-  //           );
-  //           let jobDetails = "";
-  //           culpritRequest.on("response", response => {
-  //             response.on("data", chunk => {
-  //               jobDetails += chunk.toString();
-  //             });
-  //             response.on("end", () => {
-  //               console.log(jobDetails);
-  //               let { culprits } = JSON.parse(jobDetails);
-  //               console.log(culprits);
-  //               let names = culprits.map(({ fullName }) => fullName);
-  //               jobCulpritsMap.set(job.name, { names: names, url: job.url });
-  //               try {
-  //                 mainWindow.webContents.send("update", jobCulpritsMap);
-  //               } catch (e) {
-  //                 console.log("webcontents was destoyed");
-  //               }
-  //               if (brokenJobs?.length > 0) {
-  //                 app.dock.setBadge(brokenJobs.length + "");
-  //                 app.dock.setIcon(path.join(__dirname, "jenkinsfire.png"));
-  //               } else {
-  //                 app.dock.setBadge("");
-  //                 app.dock.setIcon(path.join(__dirname, "jenkins.png"));
-  //               }
-  //             });
-  //           });
-  //           culpritRequest.end();
-  //         });
-
-  //       });
-  //     });
-  //     request.end();
-  //   });
-  // }, 5000);
+  setInterval(updateFromRadiator, 60000);
 });
 
 
 function updateFromRadiator() {
 
+  let radiatorsToMonitor = store.get('radiatorsToMonitor');
   Promise.all(
-    [
-      "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
-      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
-    ].map(url => {
+    radiatorsToMonitor.map(url => {
       return new Promise(function(resolve, reject) {
         const request = net.request(url);
 
@@ -220,7 +208,7 @@ function updateFromRadiator() {
       return JSON.parse(results).jobs.filter(job => job.color === "red");
     });
 
-    console.log(brokenJobs.flat().length);
+    console.log('Number of broken jobs', brokenJobs.flat().length);
     if (brokenJobs.length === 0) {
       app.dock.setBadge("");
       app.dock.setIcon(path.join(__dirname, "jenkins.png"));
@@ -257,7 +245,7 @@ function updateFromRadiator() {
             );
           } else if (JSON.parse(result).culprits.length > 0) {
             JSON.parse(result).culprits.forEach(({ fullName }) => {
-              culprits.push(nameToImageFileNameMap(fullName) || "unknown");
+              culprits.push(nameToImageFileNameMap[fullName] || "unknown");
             });
           } else {
             culprits.push("unknown");
@@ -269,7 +257,8 @@ function updateFromRadiator() {
           brokenJobsMap.set(jobName, {
             culprits: culprits,
             url: JSON.parse(result).url,
-            status: flattenedActionsObject.claimed ? "claimed" : "broken"
+            status: flattenedActionsObject.claimed ? "claimed" : "broken",
+            reason: flattenedActionsObject.reason ? flattenedActionsObject.reason : ""
           });
         });
         // console.log(brokenJobsMap);
@@ -280,7 +269,7 @@ function updateFromRadiator() {
         }
         app.dock.setBadge(data.length + "");
         app.dock.setIcon(path.join(__dirname, "jenkinsFire.png"));
-      });
+      }).catch(err => console.log("ERROR", err))
     }
   });
 }

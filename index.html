@@ -5,7 +5,7 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'">
-    <title>Jenkins Monitor - Alpha Version</title>
+    <title>Jenkins Monitor</title>
     <style>
       .culprit {
         height: 50px;
@@ -53,16 +53,32 @@
       h1 {
         border-bottom: 1px solid gray;
       }
+
+      .hide {
+        display: none;
+      }
+
+      .nothing-to-see img {
+        border-radius: 35px;
+        margin-top: 20px;
+      }
+
+      .reason {
+        font-size: 10px;
+      }
       
     </style>
   </head>
   <body>
-    <h1>Jenkins Monitor - Alpha Version</h1>
+    <h1 id="heading">Jenkins Monitor - Alpha Version</h1>
     <p>I'll let you know if any Omni or Central Services Radiator jobs are broken.</p>
     <div id="updateTime"></div>
     <div class="problem">💩 Any problems, log them in OPLAT-14321!  💩</div>
     <ul id="jobs"></ul>
 
+    <div class="hide nothing-to-see">
+      <img src='./assets/images/nothing.jpg' />
+    </div>
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
   </body>
