@@ -47,3 +47,4 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 
 
 User preferences stored in /Users/edanows/Library/Application Support/JenkinsMonitor
+https://qvault.io/2019/08/08/automatic-cross-platform-deployments-with-electron-on-a-ci-server-travis/
