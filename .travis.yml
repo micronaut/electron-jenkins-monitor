@@ -72,5 +72,5 @@ before_cache:
 # the 'master' and 'prod' branches
 branches:
   only:
-  - master
+  - culprits-implemenation
   - prod
