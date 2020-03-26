@@ -27,41 +27,15 @@ ipcRenderer.on("update", (event, arg) => {
     )
   }).join('');
 
-  // ipcRenderer.on('clear', () => {
-  //   document.getElementById("jobs").innerHTML = '';
-  // });
-
   document.getElementById('heading').innerHTML = `Jenkins Monitor - v${version}`
 
   document.getElementById("jobs").insertAdjacentHTML('beforeend', list);
 
   if (list.length === 0) {
     document.getElementsByClassName('nothing-to-see')[0].classList.remove('hide')
+  } else {
+    document.getElementsByClassName('nothing-to-see')[0].classList.add('hide')
   }
-  // document.getElementById("jobs").innerHTML = list;
-
-  // document.addEventListener('click', function (event) {
-  //   debugger;
-  //   if (event.target.matches('.jenkins-job')) {
-  //     // Run your code to open a modal
-  //     event.preventDefault();
-  //     shell.openExternal(event.target.getAttribute('href'));
-  //   }
-  // }, false);
-
-
-
-
-  // debugger;
-  // let list = arg.map(job => `<li><a target="_blank" class='jenkins-job' href='${job.url}'>${job.name}</a></li>`).join('')
-  // document.getElementById("jobs").innerHTML = list;
-  // document.addEventListener('click', function (event) {
-  //   if (event.target.matches('.jenkins-job')) {
-  //     // Run your code to open a modal
-  //     event.preventDefault();
-  //     shell.openExternal(event.target.getAttribute('href'));
-  //   }
-  // }, false);
 
 });
 
