@@ -9,6 +9,7 @@ const { ipcRenderer, shell } = require('electron')
 const { version}  = require('./package.json');
 
 ipcRenderer.on("update", (event, arg) => {
+  document.getElementsByClassName('loader')[0].classList.add('hide')
   document.getElementById("updateTime").innerText = `View Refreshed: ${new Date().toLocaleString()}`
   document.getElementById("jobs").innerHTML = '';
   let list = [...arg.entries()].map(([job, {culprits, url, status, reason}]) => {
