@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/micronaut/electron-jenkins-monitor.svg?branch=culprits-implemenation)](https://travis-ci.org/micronaut/electron-jenkins-monitor)
+[![Build Status](https://travis-ci.org/micronaut/electron-jenkins-monitor.svg?branch=master)](https://travis-ci.org/micronaut/electron-jenkins-monitor)
 
 # electron-jenkins-monitor
 
