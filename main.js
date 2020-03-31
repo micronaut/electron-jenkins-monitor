@@ -218,7 +218,7 @@ function updateFromRadiator() {
     });
 
     console.log('Number of broken jobs', brokenJobs.flat().length);
-    if (brokenJobs.flat().length === 0) {
+    if (brokenJobs && brokenJobs.flat().length === 0) {
       app.dock.setBadge("");
       app.dock.setIcon(path.join(__dirname, "jenkins.png"));
       mainWindow.webContents.send("update", new Map());
