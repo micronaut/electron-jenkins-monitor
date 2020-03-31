@@ -214,13 +214,14 @@ function updateFromRadiator() {
     })
   ).then(data => {
     let brokenJobs = data.map(results => {
-      return JSON.parse(results).jobs.filter(job => job.color === "red");
+      return JSON.parse(results).jobs.filter(job => job.color === "red" || job.color === 'yellow');
     });
 
     console.log('Number of broken jobs', brokenJobs.flat().length);
-    if (brokenJobs.length === 0) {
+    if (brokenJobs.flat().length === 0) {
       app.dock.setBadge("");
       app.dock.setIcon(path.join(__dirname, "jenkins.png"));
+      mainWindow.webContents.send("update", new Map());
     } else {
       Promise.all(
         brokenJobs.flat().map(brokenJob => {
