@@ -279,7 +279,7 @@ function updateFromRadiator() {
           console.log("webcontents was destoyed");
         }
         app.dock.setBadge(data.length + "");
-        app.dock.setIcon(path.join(__dirname, "jenkinsFire.png"));
+        app.dock.setIcon(path.join(__dirname, "jenkinsfire.png"));
       }).catch(err => console.log("ERROR", err))
     }
   });
