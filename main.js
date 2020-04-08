@@ -23,6 +23,7 @@ const nameToImageFileNameMap = {
   edanows: "eric.danowski",
   edanowsk: "eric.danowski",
   "eric.danowski": "eric.danowski",
+  "guri.zejnullahi": "guri.zejnullahi",
   hdash: "himanshu.dash",
   "himanshu.dash": "himanshu.dash",
   "james.miazek": "jim",
@@ -35,6 +36,10 @@ const nameToImageFileNameMap = {
   "jamie.smylnycky": "jsmylny",
   jsmylny: "jsmylny",
   jquasne: "jeff.quasney",
+  jtmckinley: "jtmckinley",
+  "james.mckinley": "jtmckinley",
+  "joe.bishop": "joe.bishop",
+  "kannan.krishnamurthy": "kannan.krishnamurthy",
   "kitcha.thirunavukkarasu": "kitcha.thirunavukkarasu",
   "krishnamoorthy.thirunavukarasu": "kitcha.thirunavukkarasu",
   kthirun: "kitcha.thirunavukkarasu",
@@ -46,8 +51,11 @@ const nameToImageFileNameMap = {
   "priya.tilavi": "priya.tilavi",
   "ramanathan.krishnamoorthy": "ramanathan.krishnamoorthy",
   rkrishna: "ramanathan.krishnamoorthy",
+  "ramkumar.vetrivelu": "ramkumar.vetrivelu",
+  ramkumar: "ramkumar.vetrivelu",
   rwang: "rui.wang",
   "rui.wang": "rui.wang",
+  "Selva.Kumar": "Selva.Kumar",
   "sgovil": "shubhamgovil", 
   "shubhamgovil": "shubhamgovil",
   spola: "spola",
@@ -99,6 +107,17 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
 
+//TODO:  Add a refresh button
+//TODO: fix the issue where sometimes on open it doesn't load
+//TODO: ADD OCEAN TEAMWill you be able to make one for ocean team?
+/*
+http://jenkins-as01.ci.gale.web:8080/view/Ocean-EnvironmentHealth-Radiator/
+http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/
+11:29
+these two are the ones they use
+*/
+
+
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
@@ -142,6 +161,34 @@ const menuArray = [
             store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"]);
           } else {
             store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"));
+          }
+          updateFromRadiator();
+        }
+      },
+      {
+        label: 'Ocean Environment Health Radiator',
+        type: 'checkbox',
+        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.ci.gale.web:8080/view/Ocean-EnvironmentHealth-Radiator/api/json"),
+        click: (evt) => { 
+          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
+          if (evt.checked) { 
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.ci.gale.web:8080/view/Ocean-EnvironmentHealth-Radiator/api/json"]);
+          } else {
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.ci.gale.web:8080/view/Ocean-EnvironmentHealth-Radiator/api/json"));
+          }
+          updateFromRadiator();
+        }
+      },
+      {
+        label: 'Ocean Radiator',
+        type: 'checkbox',
+        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"),
+        click: (evt) => { 
+          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
+          if (evt.checked) { 
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"]);
+          } else {
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"));
           }
           updateFromRadiator();
         }
