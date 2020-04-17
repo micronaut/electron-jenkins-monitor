@@ -77,6 +77,7 @@ const store = new Store({
 });
 
 let mainWindow = null;
+let disableNotifications;
 
 function createWindow() {
   // Create the browser window.
@@ -220,7 +221,20 @@ const menuArray = [
           }
           updateFromRadiator();
         }
-      }
+      },
+      {type:'separator'}, 
+      {
+        label: 'Disable Notications',
+        type: 'checkbox',
+        checked: false,
+        click: (evt) => { 
+          disableNotifications = evt.checked;
+        }
+      },
+      {
+      label: 'Quit',
+      role: 'quit'
+    }
     ],
   }
 ];
@@ -229,7 +243,7 @@ Menu.setApplicationMenu(menu);
 
 
 app.on("ready", function() {
-  setInterval(updateFromRadiator, 60000);
+  setInterval(updateFromRadiator, 10000);
 });
 
 
@@ -242,10 +256,12 @@ function updateFromRadiator() {
         const request = net.request(url);
 
         request.on("error", e => {
-          new Notification({
-            title: "Error",
-            body: `${e.message} (${url})`
-          }).show();
+          if (!disableNotifications) {
+            new Notification({
+              title: "Error",
+              body: `${e.message} (${url})`
+            }).show();
+          }
         });
         let body = "";
         request.on("response", response => {
