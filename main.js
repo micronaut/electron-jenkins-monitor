@@ -224,7 +224,7 @@ const menuArray = [
       },
       {type:'separator'}, 
       {
-        label: 'Disable Notications',
+        label: 'Disable Notifications',
         type: 'checkbox',
         checked: false,
         click: (evt) => { 
