@@ -162,13 +162,19 @@ ipcMain.on('pauseUpdateInterval', (event, _) => {
 });
 
 ipcMain.on('runSelected', (event, selectedJobs) => {
-  let { username, password } = store.get('jenkinsCredentials');
-  if (username.length === 0 || password.length === 0) {
+  let jenkinsCredentials = store.get('jenkinsCredentials')
+  if (!jenkinsCredentials || jenkinsCredentials.username.length === 0 || jenkinsCredentials.password.length === 0) {
     new Notification({
       title: "Error",
       body: "Please set your Jenkin's credentials"
     }).show();
+  } else if (selectedJobs.length === 0) {
+    new Notification({
+      title: "Error",
+      body: "Please select jobs to build"
+    }).show();
   } else {
+      let { username, password } = jenkinsCredentials;
       let buffer = new Buffer(username + ':' + password);
       selectedJobs.forEach(job => {
         let url = `http://${username}:${password}@jenkins-as01.gale.web:8080/view/Omni-Radiator/job/${job.trim()}/build`;

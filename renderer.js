@@ -36,8 +36,10 @@ ipcRenderer.on("update", (event, arg) => {
 
   if (list.length === 0) {
     document.getElementsByClassName('nothing-to-see')[0].classList.remove('hide')
+    document.getElementById('build-selected-jobs').classList.add('hide')
   } else {
     document.getElementsByClassName('nothing-to-see')[0].classList.add('hide')
+    document.getElementById('build-selected-jobs').classList.remove('hide')
   }
 
 });
