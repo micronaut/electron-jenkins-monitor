@@ -76,6 +76,12 @@
       .loader {
         width: 100%;
       }
+
+      #build-selected-jobs {
+        background-color: cadetblue;
+        border: 1px solid blue;
+        border-radius: 5px;
+      }
       
     </style>
   </head>
@@ -83,9 +89,9 @@
     <h1 id="heading">Jenkins Monitor - v0.0.5</h1>
     <p>I'll let you know if any Radiator jobs are broken.</p>
     <div id="updateTime"></div>
+    <button id="build-selected-jobs">Build Selected Jobs</button>
     <div class="problem">💩 Any problems, log them in OPLAT-14321!  💩</div>
     <ul id="jobs"></ul>
-
     <img class='loader' src='./assets/loading.gif' />
     <div class="hide nothing-to-see">
       <img src='./assets/images/nothing.jpg' />

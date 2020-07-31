@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Notification, Tray, net, Menu, MenuItem } = require("electron");
+const { app, BrowserWindow, Notification, Tray, net, Menu, MenuItem, ipcMain } = require("electron");
 const path = require("path");
 const Store = require('./store.js');
 const nameToImageFileNameMap = {
@@ -72,12 +72,14 @@ const store = new Store({
       "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
       "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
     ],
-    windowBounds: { width: 800, height: 400 }
+    windowBounds: { width: 800, height: 400 },
+    jenkinsCredentials: {username: '', password: ''},
   }
 });
 
 let mainWindow = null;
 let disableNotifications;
+let updateFromRadiatorInterval;
 
 function createWindow() {
   // Create the browser window.
@@ -121,7 +123,7 @@ these two are the ones they use
 
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // mainWindow.webContents.on('did-finish-load', () => {
   // mainWindow.webContents.send('ping', 'whoooooooh!')
@@ -146,7 +148,45 @@ app.on("activate", function() {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
+ipcMain.on('pauseUpdateInterval', (event, _) => {
+  if (updateFromRadiatorInterval !== null) {
+    clearInterval(updateFromRadiatorInterval);
+    updateFromRadiatorInterval = null;
+    setTimeout(() => {
+      if (updateFromRadiatorInterval === null) {
+        updateFromRadiatorInterval = setInterval(updateFromRadiator, 10000);
+      }
+    }, 90000);
+  }
+  event.returnValue = 0;
+});
 
+ipcMain.on('runSelected', (event, selectedJobs) => {
+  let { username, password } = store.get('jenkinsCredentials');
+  if (username.length === 0 || password.length === 0) {
+    new Notification({
+      title: "Error",
+      body: "Please set your Jenkin's credentials"
+    }).show();
+  } else {
+      let buffer = new Buffer(username + ':' + password);
+      selectedJobs.forEach(job => {
+        let url = `http://${username}:${password}@jenkins-as01.gale.web:8080/view/Omni-Radiator/job/${job.trim()}/build`;
+        let request = net.request({
+          method: 'POST',
+          url
+        });
+        request.setHeader("Authorization", `Basic ${buffer.toString('base64')}`)
+        request.end();
+      });
+  }
+  event.returnValue = 0;
+});
+
+ipcMain.on('saveCredentials', (event, credentials) => {
+  store.set('jenkinsCredentials', credentials);
+  event.returnValue = 0;
+});
 
 const menuArray = [
   {
@@ -222,7 +262,28 @@ const menuArray = [
           updateFromRadiator();
         }
       },
-      {type:'separator'}, 
+      {type:'separator'},
+      {
+        label: 'Set Jenkins Credentials',
+        click: _ => { 
+          const htmlPath = path.join('file://', __dirname, '/jenkinsCredentials.html')
+          let prefWindow = new BrowserWindow({ 
+            y: 200, 
+            x:200, 
+            width: 400, 
+            height: 200, 
+            resizable: false, 
+            parent: mainWindow, 
+            modal: true,
+            webPreferences: {
+              nodeIntegration: true
+            } 
+          })
+          // prefWindow.webContents.openDevTools();
+          prefWindow.loadURL(htmlPath)
+          prefWindow.show()
+        }
+      }, 
       {
         label: 'Disable Notifications',
         type: 'checkbox',
@@ -243,7 +304,7 @@ Menu.setApplicationMenu(menu);
 
 
 app.on("ready", function() {
-  setInterval(updateFromRadiator, 10000);
+  updateFromRadiatorInterval = setInterval(updateFromRadiator, 10000);
 });
 
 

@@ -1,6 +1,6 @@
 {
   "name": "JenkinsMonitor",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An Electron app to monitor Jenkins radiators",
   "main": "main.js",
   "scripts": {

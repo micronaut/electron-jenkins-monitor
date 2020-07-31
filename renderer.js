@@ -8,6 +8,7 @@
 const { ipcRenderer, shell } = require('electron')
 const { version}  = require('./package.json');
 
+
 ipcRenderer.on("update", (event, arg) => {
   document.getElementsByClassName('loader')[0].classList.add('hide')
   document.getElementById("updateTime").innerText = `View Refreshed: ${new Date().toLocaleString()}`
@@ -17,12 +18,13 @@ ipcRenderer.on("update", (event, arg) => {
       `<li class="job ${status}">
         <div>
           <div>
+            <input type="checkbox" class="build-select" data-job="${job}"/>
             <a target="_blank" class='jenkins-job' href='${url}'>${job}</a>
           </div>
           <div class="culpritlist">
             ${culprits.map(culprit => `<img class="culprit" src="assets/images/${culprit}.jpg" />`).join('')}
           </div>
-          <div class="reason">${reason}</div
+          <div class="reason">${reason}</div>
         </div>
       </li>`
     )
@@ -40,9 +42,15 @@ ipcRenderer.on("update", (event, arg) => {
 
 });
 
-
 document.addEventListener('click', function (event) {
-  if (event.target.matches('.jenkins-job')) {
+  if (event.target.className === 'build-select') {
+    ipcRenderer.sendSync('pauseUpdateInterval', {});
+  }
+  else if (event.target instanceof HTMLButtonElement) {
+    let selectedJobs = [...document.querySelectorAll('.build-select:checked')].map(checkbox => checkbox.getAttribute('data-job'));
+    [...document.querySelectorAll('.build-select:checked')].forEach(checkbox => checkbox.checked = false);
+    ipcRenderer.sendSync('runSelected', selectedJobs);
+  } else if (event.target.matches('.jenkins-job')) {
     // Run your code to open a modal
     event.preventDefault();
     shell.openExternal(event.target.getAttribute('href'));
