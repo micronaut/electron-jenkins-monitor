@@ -123,7 +123,7 @@ these two are the ones they use
 
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // mainWindow.webContents.on('did-finish-load', () => {
   // mainWindow.webContents.send('ping', 'whoooooooh!')
