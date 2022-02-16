@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "release": "electron-builder --publish always",
+    "release": "electron-builder --publish always --mac",
     "test": "echo success",
     "build": "electron-packager . JenkinsMonitor --overwrite --icon=./jenkins.icns --out=build --extraResources=[jenkins.png, jenkinsfire.png]",
     "build-snapshot": "electron-packager . JenkinsMonitor-$npm_package_version --overwrite --icon=./jenkins.icns --out=snapshot2 --extraResources=[jenkins.png, jenkinsfire.png]",
