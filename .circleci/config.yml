@@ -17,6 +17,3 @@ jobs:
       - run:
           name: Generate Builds
           command: npm run release --mac
-
-      - store_artifacts:
-          path: ~/repo/out/make
