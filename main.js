@@ -14,6 +14,8 @@ const nameToImageFileNameMap = {
   "anshuman.ambasht": "anshumanambasht",
   "aanshuman": "anshumanambasht",
   anshumanambasht: "anshumanambasht",
+  "christopher.dolunt": "christopher.dolunt",
+  cdolunt: "christopher.dolunt",
   "dan.muszynski": "dan.muszynski",
   dmuszyns: "dan.muszynski",
   "daniel.michon": "daniel.michon",

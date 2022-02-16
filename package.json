@@ -8,7 +8,7 @@
     "release": "electron-builder",
     "test": "echo success",
     "build": "electron-packager . JenkinsMonitor --overwrite --icon=./jenkins.icns --out=build --extraResources=[jenkins.png, jenkinsfire.png]",
-    "build-snapshot": "electron-packager . JenkinsMonitor --overwrite --icon=./jenkins.icns --out=snapshot2 --extraResources=[jenkins.png, jenkinsfire.png]",
+    "build-snapshot": "electron-packager . JenkinsMonitor-$npm_package_version --overwrite --icon=./jenkins.icns --out=snapshot2 --extraResources=[jenkins.png, jenkinsfire.png]",
     "package-win": "electron-packager . JenkinsMonitor --overwrite --asar --platform=win32 --arch=x64 --icon=jenkins.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Jenkins Monitor\""
   },
   "repository": "https://github.com/micronaut/electron-jenkins-monitor",
