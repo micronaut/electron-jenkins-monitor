@@ -12,12 +12,6 @@ jobs:
           name: Install Dependencies
           command: npm install
       - run:
-          name: Install dpkg and fakeroot
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y dpkg fakeroot
-
-      - run:
           name: Generate Builds
           command: npm run release --mac
 
