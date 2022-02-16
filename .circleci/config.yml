@@ -1,8 +1,8 @@
 version: 2.1
 jobs:
   build:
-    docker:
-      - image: circleci/node:14
+    macos:
+      xcode: 12.5.1 # indicate your selected version of Xcode
     steps:
       - checkout
       - run:
