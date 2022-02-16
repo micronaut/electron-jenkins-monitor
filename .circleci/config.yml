@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     macos:
-      xcode: 10.2 # indicate your selected version of Xcode
+      xcode: 12.5.1 # indicate your selected version of Xcode
     steps:
       - checkout
       - run:
