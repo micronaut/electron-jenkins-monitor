@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build_macos:
+    macos:
+      xcode: "10.0.0"
+    steps:
+      - checkout
+      - run: npm ci && npm run release --mac
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_macos
