@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  github-release: h-matsuo/github-release@0.1.1
 jobs:
   build:
     macos:
@@ -18,9 +16,4 @@ jobs:
           command: npm install
       - run:
           name: Generate Builds
-          command: npm run release --mac
-      - github-release/create:
-          tag: v0.0.8
-          title: Version v0.0.8
-          description: This release is version v0.0.8.
-          file-path: ./dist  
+          command: npm run release --mac 
