@@ -1,6 +1,9 @@
 version: 2.1
+orbs:
+  github-release: h-matsuo/github-release@0.1.1
 jobs:
   build:
+    executor: github-release/default
     macos:
       xcode: 10.3.0 # indicate your selected version of Xcode
     steps:
@@ -17,6 +20,8 @@ jobs:
       - run:
           name: Generate Builds
           command: npm run release --mac
-      - store_artifacts:
-          path: /dist
-          # path: ~/repo/out/make    
+      - github-release/create:
+          tag: v0.0.8
+          title: Version v0.0.8
+          description: This release is version v0.0.8.
+          file-path: ./dist  
