@@ -1,19 +1,21 @@
-version: 2.1
-jobs:
-  build:
-    macos:
-      xcode: 10.3.0 # indicate your selected version of Xcode
-    steps:
-      - checkout
-      - run:
-          name: Update NPM
-          command: "sudo npm install -g npm"
-      - run:
-          name: Fix Bug in NPM
-          command: "sudo chown -R 501:20 \"/Users/distiller/.npm\""
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
-          name: Generate Builds
-          command: npm run release --mac 
+workflows:
+  version: 2.1
+  main:
+    jobs:
+      - build:
+          macos:
+            xcode: 10.3.0 # indicate your selected version of Xcode
+          steps:
+            - checkout
+            - run:
+                name: Update NPM
+                command: "sudo npm install -g npm"
+            - run:
+                name: Fix Bug in NPM
+                command: "sudo chown -R 501:20 \"/Users/distiller/.npm\""
+            - run:
+                name: Install Dependencies
+                command: npm install
+            - run:
+                name: Generate Builds
+                command: npm run release --mac 
