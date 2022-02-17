@@ -3,7 +3,6 @@ orbs:
   github-release: h-matsuo/github-release@0.1.1
 jobs:
   build:
-    executor: github-release/default
     macos:
       xcode: 10.3.0 # indicate your selected version of Xcode
     steps:
