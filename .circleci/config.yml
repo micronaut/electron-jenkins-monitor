@@ -24,10 +24,10 @@ jobs:
       #       mkdir /tmp/artifacts;
       #       echo "my artifact files in a dir" > /tmp/artifacts/art-2;
       - store_artifacts:
-          path: dist/JenkinsMonitor-0.0.7.dmg
-          destination: JenkinsMonitor-0.0.7.dmg
-      - store_artifacts:
-          path: /tmp/artifacts    
+          path: dist/JenkinsMonitor-0.0.8.dmg
+          destination: JenkinsMonitor-0.0.8.dmg
+      # - store_artifacts:
+      #     path: /tmp/artifacts    
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10

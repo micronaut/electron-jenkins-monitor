@@ -44,6 +44,7 @@ const nameToImageFileNameMap = {
   "james.mckinley": "jtmckinley",
   "joe.bishop": "joe.bishop",
   "jatkins": "josh.atkins",
+  "joshua.atkins@cengage.com": "josh.atkins",
   "kannan.krishnamurthy": "kannan.krishnamurthy",
   "kitcha.thirunavukkarasu": "kitcha.thirunavukkarasu",
   "krishnamoorthy.thirunavukarasu": "kitcha.thirunavukkarasu",
