@@ -10,7 +10,7 @@ jobs:
           command: "sudo npm install -g npm"
       - run:
           name: Fix Bug in NPM
-          command: "sudo chown -R 501:20 \"/Users/distiller/.npm\""
+          command: "sudo chown -R 502:20 \"/Users/distiller/.npm\""
       - run:
           name: Install Dependencies
           command: npm install
