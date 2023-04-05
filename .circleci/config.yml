@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     macos:
-      xcode: 11.7.0 # indicate your selected version of Xcode
+      xcode: 10.3.0 # indicate your selected version of Xcode
     steps:
       - checkout
       - run:
@@ -17,8 +17,14 @@ jobs:
       - run:
           name: Generate Builds
           command: npm run release --mac
+      - run:
+          name: Creating Dummy Artifacts
+          command: |
+            echo "my artifact file" > /tmp/JenkinsMonitor-0.0.8.dmg;
+            mkdir /tmp/artifacts;
+            echo "my artifact files in a dir" > /tmp/artifacts/art-2;    
       - store_artifacts:
-          path: dist/JenkinsMonitor-0.0.8.dmg
+          path: tmp/JenkinsMonitor-0.0.8.dmg
           destination: JenkinsMonitor-0.0.8.dmg 
   publish-github-release:
     docker:
