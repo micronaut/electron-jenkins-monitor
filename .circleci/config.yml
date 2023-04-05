@@ -24,8 +24,6 @@ jobs:
       - store_artifacts:
           path: dist/JenkinsMonitor-0.0.8.dmg
           destination: JenkinsMonitor-0.0.8.dmg
-      - store_artifacts:
-          path: /tmp/artifacts 
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
