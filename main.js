@@ -75,7 +75,8 @@ const store = new Store({
   defaults: {
     radiatorsToMonitor: [
       "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json",
-      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"
+      "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json",
+      "https://jenkins-source.cengage.info/view/LUNA%20Radiator/api/json"
     ],
     windowBounds: { width: 800, height: 400 },
     jenkinsCredentials: {username: '', password: ''},
@@ -203,6 +204,20 @@ const menuArray = [
   {
     label: 'Settings',
     submenu: [
+       {
+        label: 'Omni Radiator',
+        type: 'checkbox',
+        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"),
+        click: (evt) => { 
+          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
+          if (evt.checked) { 
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"]);
+          } else {
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"));
+          }
+          updateFromRadiator();
+        }
+      },
       {
         label: 'Central Services Radiator',
         type: 'checkbox',
@@ -213,6 +228,20 @@ const menuArray = [
             store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"]);
           } else {
             store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.gale.web:8080/view/CentralServices-Radiator/api/json"));
+          }
+          updateFromRadiator();
+        }
+      },
+      {
+        label: 'Luna Radiator',
+        type: 'checkbox',
+        checked: store.get('radiatorsToMonitor').includes("https://jenkins-source.cengage.info/view/LUNA%20Radiator/api/json"),
+        click: (evt) => { 
+          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
+          if (evt.checked) { 
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "https://jenkins-source.cengage.info/view/LUNA%20Radiator/api/json"]);
+          } else {
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "https://jenkins-source.cengage.info/view/LUNA%20Radiator/api/json"));
           }
           updateFromRadiator();
         }
@@ -241,20 +270,6 @@ const menuArray = [
             store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"]);
           } else {
             store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"));
-          }
-          updateFromRadiator();
-        }
-      },
-      {
-        label: 'Omni Radiator',
-        type: 'checkbox',
-        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"),
-        click: (evt) => { 
-          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
-          if (evt.checked) { 
-            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"]);
-          } else {
-            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.gale.web:8080/view/Omni-Radiator/api/json"));
           }
           updateFromRadiator();
         }
