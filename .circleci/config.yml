@@ -3,7 +3,7 @@ version: 2.1
 executors:
   mac-executor:
     macos:
-      xcode: "10.2.0"
+      xcode: "14.1.0"
     working_directory: ~/repo
 
 jobs:
