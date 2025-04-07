@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install dependencies
+          name: Install Node.js using nvm
           command: |
             # Install nvm (Node Version Manager)
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
@@ -24,9 +24,7 @@ jobs:
             nvm use 18
             # Verify the Node.js version
             node -v
-      - run:
-          name: Install dependencies
-          command: npm ci
+            npm ci
 
   deploy:
     executor: mac-executor
