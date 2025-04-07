@@ -19,9 +19,9 @@ jobs:
             # Source nvm to make it available in the shell
             source ~/.nvm/nvm.sh
             # Install the desired Node.js version (e.g., 16)
-            nvm install 12.22.12
+            nvm install 18
             # Set the default node version
-            nvm use 12
+            nvm use 18
             # Verify the Node.js version
             node -v
       - run:
