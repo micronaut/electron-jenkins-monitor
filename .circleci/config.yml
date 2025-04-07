@@ -1,45 +1,40 @@
 version: 2.1
-jobs:
-  build:
+
+executors:
+  mac-executor:
     macos:
-      xcode: 14.2 # indicate your selected version of Xcode
+      xcode: "10.2.0"
+    working_directory: ~/repo
+
+jobs:
+  install_dependencies:
+    executor: mac-executor
     steps:
       - checkout
       - run:
-          name: Update NPM
-          command: "sudo npm install -g npm"
-      - run:
-          name: Fix Bug in NPM
-          command: "sudo chown -R 502:20 \"/Users/distiller/.npm\""
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
-          name: Generate Builds
-          command: npm run release --mac
-      - run:
-          name: Creating Artifacts Directory
-          command: |
-            mkdir /tmp/artifacts;
-      - store_artifacts:
-          path: dist/JenkinsMonitor-0.0.8.dmg
-          destination: JenkinsMonitor-0.0.8.dmg
-  publish-github-release:
-    docker:
-      - image: cibuilds/github:0.10
+          name: Install dependencies
+          command: yarn install
+
+  deploy:
+    executor: mac-executor
+    environment:
+      CIRCLE_OS: macos
     steps:
-      - attach_workspace:
-          at: ./artifacts
+      - checkout
       - run:
-          name: "Publish Release on GitHub"
-          command: |
-            VERSION=0.0.8
-            ghr -t "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" -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./dist/        
+          name: Run deploy script
+          command: bash deploy.circleci.sh
+
 workflows:
   version: 2
-  build-and-deploy:
+  build_and_deploy:
     jobs:
-      - build
-      # - publish-github-release:
-      #     requires:
-      #       - build
+      - install_dependencies
+      - deploy:
+          requires:
+            - install_dependencies
+
+caches:
+  dependencies: ~/.cache/yarn
+  electron_cache: ~/.cache/electron
+  electron_builder_cache: ~/.cache/electron-builder
