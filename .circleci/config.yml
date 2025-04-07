@@ -13,7 +13,20 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: yarn install
+          command: |
+            # Install nvm (Node Version Manager)
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+            # Source nvm to make it available in the shell
+            source ~/.nvm/nvm.sh
+            # Install the desired Node.js version (e.g., 16)
+            nvm install 12.22.12
+            # Set the default node version
+            nvm use 12
+            # Verify the Node.js version
+            node -v
+      - run:
+          name: Install dependencies
+          command: npm ci
 
   deploy:
     executor: mac-executor
