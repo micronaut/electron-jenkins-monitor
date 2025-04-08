@@ -25,6 +25,10 @@ jobs:
             # Verify the Node.js version
             node -v
             npm ci
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules      
 
   deploy:
     executor: mac-executor
@@ -32,9 +36,6 @@ jobs:
       CIRCLE_OS: macos
     steps:
       - checkout
-      - run:
-          name: Install electron-builder globally (if needed)
-          command: npm install -g electron-builder@23.6.0 
       - run:
           name: Run deploy script
           command: bash deploy.circleci.sh
