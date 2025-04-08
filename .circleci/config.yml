@@ -4,13 +4,17 @@ executors:
   mac-executor:
     macos:
       xcode: "14.1.0"
-    working_directory: /tmp
+    working_directory: ~/repo
 
 jobs:
   install_dependencies:
     executor: mac-executor
     steps:
       - checkout
+      - run:
+          name: Create build-output directory
+          command: |
+            mkdir -p dmg-artifacts  
       - run:
           name: Install Node.js using nvm
           command: |
@@ -28,7 +32,7 @@ jobs:
             npm run release
       - store_artifacts:
           path: dist/JenkinsMonitor-0.0.8.dmg  # Path to your .dmg file
-          destination: /tmp/dmg-artifacts      
+          destination: dmg-artifacts      
 
 workflows:
   version: 2
