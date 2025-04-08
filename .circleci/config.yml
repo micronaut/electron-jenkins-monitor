@@ -33,6 +33,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install electron-builder globally (if needed)
+          command: npm install -g electron-builder@23.6.0 
+      - run:
           name: Run deploy script
           command: bash deploy.circleci.sh
 
