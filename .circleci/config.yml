@@ -14,7 +14,11 @@ jobs:
       - run:
           name: Create build-output directory
           command: |
-            mkdir -p dmg-artifacts  
+            mkdir -p dmg-artifacts 
+      - run:
+            command: |
+              mkdir -p /tmp/artifacts
+              echo "Hello, Artifacts!" > /tmp/artifacts/my_file.txt       
       - run:
           name: Install Node.js using nvm
           command: |

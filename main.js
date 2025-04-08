@@ -95,6 +95,7 @@ function createWindow() {
     height: height,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       preload: path.join(__dirname, "preload.js"),
     }
   });
@@ -219,29 +220,15 @@ const menuArray = [
         }
       },
       {
-        label: 'Ocean Environment Health Radiator',
+        label: 'Tsunami (TAC) Radiator',
         type: 'checkbox',
-        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.ci.gale.web:8080/view/Ocean-EnvironmentHealth-Radiator/api/json"),
+        checked: store.get('radiatorsToMonitor').includes("https://jenkins-source.cengage.info/view/Omni%20Tsunami%20Radiator/api/json"),
         click: (evt) => { 
           let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
           if (evt.checked) { 
-            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.ci.gale.web:8080/view/Ocean-EnvironmentHealth-Radiator/api/json"]);
+            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "https://jenkins-source.cengage.info/view/Omni%20Tsunami%20Radiator/api/json"]);
           } else {
-            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.ci.gale.web:8080/view/Ocean-EnvironmentHealth-Radiator/api/json"));
-          }
-          updateFromRadiator();
-        }
-      },
-      {
-        label: 'Ocean Radiator',
-        type: 'checkbox',
-        checked: store.get('radiatorsToMonitor').includes("http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"),
-        click: (evt) => { 
-          let currentRadiatorsToMonitor = store.get('radiatorsToMonitor');
-          if (evt.checked) { 
-            store.set('radiatorsToMonitor', [...currentRadiatorsToMonitor, "http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"]);
-          } else {
-            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "http://jenkins-as01.ci.gale.web:8080/view/Ocean-Radiator/api/json"));
+            store.set('radiatorsToMonitor', currentRadiatorsToMonitor.filter(radiator => radiator !== "https://jenkins-source.cengage.info/view/Omni%20Tsunami%20Radiator/api/json"));
           }
           updateFromRadiator();
         }
