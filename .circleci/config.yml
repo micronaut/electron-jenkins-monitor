@@ -25,29 +25,13 @@ jobs:
             # Verify the Node.js version
             node -v
             npm ci
-      - persist_to_workspace:
-          root: .
-          paths:
-            - node_modules      
-
-  deploy:
-    executor: mac-executor
-    environment:
-      CIRCLE_OS: macos
-    steps:
-      - checkout
-      - run:
-          name: Run deploy script
-          command: bash deploy.circleci.sh
+            npm run release
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - install_dependencies
-      - deploy:
-          requires:
-            - install_dependencies
 
 caches:
   dependencies: ~/.cache/yarn
