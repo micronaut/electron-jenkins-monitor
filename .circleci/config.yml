@@ -26,6 +26,9 @@ jobs:
             node -v
             npm ci
             npm run release
+      - store_artifacts:
+          path: dist/JenkinsMonitor-0.0.8.dmg  # Path to your .dmg file
+          destination: dmg-artifacts      
 
 workflows:
   version: 2
