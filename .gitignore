@@ -3,4 +3,5 @@ snapshot
 snapshot2
 release-builds
 dist
+.idea/
 .DS_Store

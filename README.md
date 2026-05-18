@@ -46,7 +46,11 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 
 [CC0 1.0 (Public Domain)](LICENSE.md)
 
-
+## To build locally
+```bash
+#npx electron-builder --mac --universal --publish=never
+NODE_OPTIONS=--max-old-space-size=12288 npx electron-builder --mac --arm64 --publish=never
+```
 
 User preferences stored in /Users/edanows/Library/Application Support/JenkinsMonitor
 https://qvault.io/2019/08/08/automatic-cross-platform-deployments-with-electron-on-a-ci-server-travis/
